@@ -8,7 +8,8 @@ object Basics {
   // https://en.wikipedia.org/wiki/Greatest_common_divisor for integers.
 
   def lcm(a: Int, b: Int): Int = {
-    math.abs(a*b) / gcd(a, b)
+    if (a == 0 && b == 0) 0
+    else math.abs(a*b) / gcd(a, b)
   }
 
   @tailrec
