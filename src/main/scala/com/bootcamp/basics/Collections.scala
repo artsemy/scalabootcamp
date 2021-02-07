@@ -1,7 +1,5 @@
 package com.bootcamp.basics
 
-import scala.annotation.tailrec
-
 object Collections {
 
   // hometask:
@@ -12,10 +10,7 @@ object Collections {
   // https://leetcode.com/problems/widest-vertical-area-between-two-points-containing-no-points
 
   def runningSum(nums: Array[Int]): Array[Int] = {
-    val nums2 = nums.reverse
-    val res = Array[Int](nums.length)
-
-    res
+    nums.scan(0)(_ + _).tail
   }
 
   def shuffle(nums: Array[Int], n: Int): Array[Int] = {
@@ -48,10 +43,11 @@ object Collections {
   }
 
   def main(args: Array[String]): Unit = {
-//    println(runningSum(Array(1, 2, 3, 4)).mkString("[", ",", "]"))
-//    println(shuffle(Array(1, 2, 3, 4), 2).mkString("[", ",", "]")) //done
-//    println(maximumWealth(Array(Array(1, 5), Array(7, 3), Array(3, 5)))) //done
-//    println(kidsWithCandies(Array(2, 3, 5, 1, 3), 3).mkString("[", ",", "]")) //done
-//    println(maxWidthOfVerticalArea(Array(Array(8, 7), Array(9, 9), Array(7, 4), Array(9, 7)))) //done
+    println(runningSum(Array(1, 2, 3, 4)).mkString("[", ",", "]")) //done
+    println(shuffle(Array(1, 2, 3, 4), 2).mkString("[", ",", "]")) //done
+    println(maximumWealth(Array(Array(1, 5), Array(7, 3), Array(3, 5)))) //done
+    println(kidsWithCandies(Array(2, 3, 5, 1, 3), 3).mkString("[", ",", "]")) //done
+    println(maxWidthOfVerticalArea(Array(Array(8, 7), Array(9, 9), Array(7, 4), Array(9, 7)))) //done
   }
+
 }
