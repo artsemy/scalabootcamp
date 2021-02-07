@@ -12,24 +12,15 @@ object Collections {
   // https://leetcode.com/problems/widest-vertical-area-between-two-points-containing-no-points
 
   def runningSum(nums: Array[Int]): Array[Int] = {
-    @tailrec
-    def sum(x: Int, array: Array[Int]) {
-      if (array.nonEmpty) {
-        array.update(0, array.head + x)
-        sum(array.head, array.tail)
-      }
-    }
-    sum(nums.head, nums.tail)
-    nums
+    val nums2 = nums.reverse
+    val res = Array[Int](nums.length)
+
+    res
   }
 
   def shuffle(nums: Array[Int], n: Int): Array[Int] = {
-//    val arr1: Array[Int] = nums.take(n)
-//    val arr2: Array[Int] = nums.takeRight(n)
-    val arr1 = new Array[Int](n)
-    nums.copyToArray(arr1, 0, n)
-    val arr2 = new Array[Int](n)
-    nums.copyToArray(arr2, 0)
+    val arr1 = nums.dropRight(n)
+    val arr2 = nums.drop(n)
     arr1.zip(arr2).flatMap(x => Array(x._1, x._2))
   }
 
@@ -43,14 +34,24 @@ object Collections {
   }
 
   def maxWidthOfVerticalArea(points: Array[Array[Int]]): Int = {
-    val l1 = points.map(x => x.head)
-    l1.max
+    val l1: Array[Int] = points.map(x => x.head)
+    val l2 = l1.sorted
+    def func(array: Array[Int]): Int = {
+      if (array.length > 2) {
+        math.max(array.apply(1) - array.head, func(array.tail))
+      }
+      else {
+        array.apply(1) - array.head
+      }
+    }
+    func(l2)
   }
 
   def main(args: Array[String]): Unit = {
 //    println(runningSum(Array(1, 2, 3, 4)).mkString("[", ",", "]"))
-//    println(shuffle(Array(1, 2, 3, 4), 2).mkString("[", ",", "]"))
-//    println(maximumWealth(Array(Array(1, 5), Array(7, 3), Array(3, 5))))
-//    println(kidsWithCandies(Array(2, 3, 5, 1, 3), 3).mkString("[", ",", "]"))
+//    println(shuffle(Array(1, 2, 3, 4), 2).mkString("[", ",", "]")) //done
+//    println(maximumWealth(Array(Array(1, 5), Array(7, 3), Array(3, 5)))) //done
+//    println(kidsWithCandies(Array(2, 3, 5, 1, 3), 3).mkString("[", ",", "]")) //done
+//    println(maxWidthOfVerticalArea(Array(Array(8, 7), Array(9, 9), Array(7, 4), Array(9, 7)))) //done
   }
 }
