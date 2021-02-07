@@ -93,10 +93,10 @@ object ControlStructuresHomework {
 
   def renderResult(x: Command): String = x match {
     case Divide(dividend, divisor) => s"$dividend divided by $divisor is ${calculate(x)}"
-    case Sum(numbers) => s"the sum of $numbers is ${calculate(x)}"
-    case Average(numbers) => s"the average of $numbers is ${calculate(x)}"
-    case Min(numbers) => s"the minimum of $numbers is ${calculate(x)}"
-    case Max(numbers) => s"the maximum of $numbers is ${calculate(x)}"
+    case Sum(numbers) => s"the sum of ${numbers.mkString(" ")} is ${calculate(x)}"
+    case Average(numbers) => s"the average of ${numbers.mkString(" ")} is ${calculate(x)}"
+    case Min(numbers) => s"the minimum of ${numbers.mkString(" ")} is ${calculate(x)}"
+    case Max(numbers) => s"the maximum of ${numbers.mkString(" ")} is ${calculate(x)}"
   }
 
   def process(x: String): String = {
