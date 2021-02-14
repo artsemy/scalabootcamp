@@ -16,7 +16,7 @@ object Collections {
   def shuffle(nums: Array[Int], n: Int): Array[Int] = {
     val arr1 = nums.dropRight(n)
     val arr2 = nums.drop(n)
-    arr1.zip(arr2).flatMap(x => Array(x._1, x._2))
+    arr1.zip(arr2).flatMap(x => Array(x._1, x._2)) //fix
   }
 
   def maximumWealth(accounts: Array[Array[Int]]): Int = {
