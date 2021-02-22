@@ -37,3 +37,25 @@ object Task1 {
   // TODO: create Ordering instance for Money
   implicit val moneyOrdering: Ordering[Money] = (x: Money, y: Money) => x.amount compare y.amount
 }
+
+object Task2 extends App {
+  trait Show[T] { // fancy toString
+    def show(entity: T): String
+  }
+
+  object Show {
+    def apply[T](implicit i: Show[T]): Show[T] = i
+  }
+
+  final case class User(id: String, name: String)
+
+  // TODO: create Show instance for User
+  implicit val ShowUser: Show[User] = user => s"user_id: ${user.id}, user_name: ${user.name}"
+  // TODO: create syntax for Show so i can do User("1", "Oleg").show
+
+  implicit class ShowUserFunc[T](x: T) {
+    def show(implicit i: Show[T]): String = {i.show(x)}
+  }
+
+  println(User("1", "Oleg").show)
+}
