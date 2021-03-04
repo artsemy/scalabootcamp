@@ -132,6 +132,34 @@ object HKT {
         If you struggle with writing generic instances for Iterate and Iterate2, start by writing instances for
         List and other collections and then replace those with generic instances.
          */
+        implicit val byteSizeScore: GetSizeScore[Byte] = (_: Byte) => 1
+        implicit val charSizeScore: GetSizeScore[Char] = (_: Char) => 2
+        implicit val intSizeScore: GetSizeScore[Int] = (_: Int) => 4
+        implicit val longSizeScore: GetSizeScore[Long] = (_: Long) => 8
+
+        implicit val stringSizeScore: GetSizeScore[String] = (value: String) => 12 + value.length * 2
+
+        implicit def arraySizeScore[T: GetSizeScore]: GetSizeScore[Array[T]] = (array: Array[T]) => {
+          array.foldLeft(12)((x, y) => x + y.sizeScore)
+        }
+        implicit def listSizeScore[T: GetSizeScore]: GetSizeScore[List[T]] = (list: List[T]) => {
+          //        list.toArray.sizeScore
+          list.foldLeft(12)((x, y) => x + y.sizeScore)
+        }
+        implicit def vectorSizeScore[T: GetSizeScore]: GetSizeScore[Vector[T]] = (vector: Vector[T]) => {
+          //        vector.toArray.sizeScore
+          vector.foldLeft(12)((x, y) => x + y.sizeScore)
+        }
+
+        implicit def mapSizeScore[K: GetSizeScore, V: GetSizeScore]: GetSizeScore[Map[K, V]] = (map: Map[K, V]) =>
+        {
+          12 + map.keys.sizeScore + map.values.sizeScore
+        }
+        implicit def packedMultyMapSizeScore[K: GetSizeScore, V: GetSizeScore]: GetSizeScore[PackedMultiMap[K, V]] =
+          (packedMultiMap: PackedMultiMap[K, V]) =>
+          {
+            12 + packedMultiMap.inner.toMap.values.sizeScore + packedMultiMap.inner.toMap.keys.sizeScore
+          }
 
         implicit def stubGetSizeScore[T]: GetSizeScore[T] = (_: T) => 42
       }
