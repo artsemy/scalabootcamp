@@ -1,5 +1,6 @@
 package com.bootcamp.typeclass
 
+import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable
 
@@ -59,6 +60,7 @@ object HKT {
          */
         private val map = mutable.LinkedHashMap.empty[K, V]
 
+        @tailrec
         def put(key: K, value: V): Unit = {
           if (countSizeScore + key.sizeScore + value.sizeScore > maxSizeScore) {
             map.remove(map.keySet.head)
@@ -153,15 +155,15 @@ object HKT {
 
         implicit def mapSizeScore[K: GetSizeScore, V: GetSizeScore]: GetSizeScore[Map[K, V]] = (map: Map[K, V]) =>
         {
-          12 + map.keys.sizeScore + map.values.sizeScore
+          map.foldLeft(12) { case (acc, (x, y)) => acc + x.sizeScore + y.sizeScore }
         }
         implicit def packedMultyMapSizeScore[K: GetSizeScore, V: GetSizeScore]: GetSizeScore[PackedMultiMap[K, V]] =
           (packedMultiMap: PackedMultiMap[K, V]) =>
           {
-            12 + packedMultiMap.inner.toMap.values.sizeScore + packedMultiMap.inner.toMap.keys.sizeScore
+            packedMultiMap.inner.toMap.sizeScore
           }
 
-        implicit def stubGetSizeScore[T]: GetSizeScore[T] = (_: T) => 42
+//        implicit def stubGetSizeScore[T]: GetSizeScore[T] = (_: T) => 42 // ruins why?
       }
     }
 
