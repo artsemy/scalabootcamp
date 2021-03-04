@@ -171,6 +171,8 @@ object HKT {
      */
     object MyTwitter {
       import SuperVipCollections4s._
+      import instances._
+      import syntax._
 
       final case class Twit(
                              id: Long,
@@ -191,10 +193,26 @@ object HKT {
         def get(id: Long): Option[Twit]
       }
 
+      implicit val twitSizeScore: GetSizeScore[Twit] = (twit: Twit) => {
+        twit.id.sizeScore + twit.userId.sizeScore + twit.hashTags.sizeScore +
+          twit.attributes.sizeScore + twit.fbiNotes.sizeScore
+      }
+
+      implicit val fbiNoteSizeScore: GetSizeScore[FbiNote] = (fbiNote: FbiNote) => {
+        fbiNote.month.sizeScore + fbiNote.favouriteChar.sizeScore + fbiNote.watchedPewDiePieTimes.sizeScore
+      }
+
       /*
       Return an implementation based on MutableBoundedCache[Long, Twit]
        */
-      def createTwitCache(maxSizeScore: SizeScore): TwitCache = ???
+
+      def createTwitCache(maxSizeScore: SizeScore): TwitCache = new TwitCache {
+        val cacheMap = new MutableBoundedCache[Long, Twit](maxSizeScore: SizeScore)
+
+        override def put(twit: Twit): Unit = cacheMap.put(twit.id, twit)
+
+        override def get(id: Long): Option[Twit] = cacheMap.get(id)
+      }
     }
   }
 }
